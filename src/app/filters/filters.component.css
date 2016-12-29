@@ -1,0 +1,9 @@
+:host {
+  padding: 10px;
+  display: flex;
+}
+
+md-input-container {
+  flex-grow: 1;
+}
+
