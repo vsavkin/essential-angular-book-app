@@ -1,28 +1,37 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import {fakeAsync, tick} from '@angular/core/testing';
 
 import { FiltersCmp } from './filters.component';
 
 describe('FiltersCmp', () => {
-  let component: FiltersCmp;
-  let fixture: ComponentFixture<FiltersCmp>;
+  describe("when filters change", () => {
+    it('should fire a change event after 200 millis', fakeAsync(() => {
+      const component = new FiltersCmp((v) => v);
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ FiltersCmp ]
-    })
-    .compileComponents();
-  }));
+      const events = [];
+      component.change.subscribe(v => events.push(v));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(FiltersCmp);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+      component.filters.controls['title'].setValue('N');
+      setTimeout(() => { component.filters.controls['title'].setValue('Ne'); }, 150);
+      setTimeout(() => { component.filters.controls['title'].setValue('New'); }, 200);
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+      expect(events).toEqual([]);
+
+      tick(1000);
+
+      // only one item because of debouncing
+      expect(events).toEqual([
+        {title: 'New', speaker: null, highRating: false}
+      ]);
+
+      component.filters.controls['title'].setValue('New!');
+
+      tick(1000);
+
+      expect(events).toEqual([
+        {title: 'New', speaker: null, highRating: false},
+        {title: 'New!', speaker: null, highRating: false}
+      ]);
+    }));
   });
 });

@@ -1,34 +1,60 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async } from '@angular/core/testing';
+import {TestBed, async, ComponentFixture, inject} from '@angular/core/testing';
 import { AppCmp } from './app.component';
+import { AppModule } from './app.module';
+import {App} from "./app";
 
 describe('AppCmp', () => {
-  beforeEach(() => {
+  let component: AppCmp;
+  let fixture: ComponentFixture<AppCmp>;
+  let el: Element;
+
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AppCmp
-      ],
+      imports: [AppModule]
     });
     TestBed.compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppCmp);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    el = fixture.debugElement.nativeElement;
   });
 
-  it('should create the app', async(() => {
-    let fixture = TestBed.createComponent(AppCmp);
-    let app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
-
-  it(`should have as title 'app works!'`, async(() => {
-    let fixture = TestBed.createComponent(AppCmp);
-    let app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app works!');
-  }));
-
-  it('should render title in a h1 tag', async(() => {
-    let fixture = TestBed.createComponent(AppCmp);
+  it('should filter talks by title', async(inject([App], (app: App) => {
+    app.model.talks = [
+      {
+        "id": 1,
+        "title": "Are we there yet?",
+        "speaker": "Rich Hickey",
+        "yourRating": null,
+        "rating": 9.0
+      },
+      {
+        "id": 2,
+        "title": "The Value of Values",
+        "speaker": "Rich Hickey",
+        "yourRating": null,
+        "rating": 8.0
+      },
+    ];
     fixture.detectChanges();
-    let compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('app works!');
-  }));
+
+
+    expect(el.innerHTML).toContain("Are we there yet?");
+    expect(el.innerHTML).toContain("The Value of Values");
+
+    component.handleFiltersChange({
+      title: 'we',
+      speaker: null,
+      minRating: 0
+    });
+    fixture.detectChanges();
+
+    expect(el.innerHTML).toContain("Are we there yet?");
+    expect(el.innerHTML).not.toContain("The Value of Values");
+  })));
 });

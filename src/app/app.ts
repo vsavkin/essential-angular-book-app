@@ -1,12 +1,12 @@
 import {Talk, Model, Filters} from "./model";
 
 export class App {
-  filters: Filters = {speaker: null, title: null, minRating: 0};
-  rawModel: Model = {
+  model: Model = {
+    filters: {speaker: null, title: null, minRating: 0},
     talks: [
       {
         "id": 898,
-        "title": "Are we there yet",
+        "title": "Are we there yet?",
         "speaker": "Rich Hickey",
         "yourRating": null,
         "rating": 9.1
@@ -35,14 +35,14 @@ export class App {
     ]
   };
 
-  get model(): Model {
-    const talks = this.rawModel.talks.filter(t => {
-      const titlePass = this.filters.title ? t.title.indexOf(this.filters.title) > -1 : true;
-      const speakerPass = this.filters.speaker ? t.speaker.indexOf(this.filters.speaker) > -1 : true;
-      const ratingPass = t.rating >= this.filters.minRating;
+  get talks(): Talk[] {
+    const filters = this.model.filters;
+    return this.model.talks.filter(t => {
+      const titlePass = filters.title ? t.title.indexOf(filters.title) > -1 : true;
+      const speakerPass = filters.speaker ? t.speaker.indexOf(filters.speaker) > -1 : true;
+      const ratingPass = t.rating >= filters.minRating;
       return titlePass && speakerPass && ratingPass;
     });
-    return {talks};
   }
 
   rateTalk(talk: Talk, rating: number): void {

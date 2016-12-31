@@ -1,11 +1,19 @@
-import { browser, element, by } from 'protractor';
+import {browser, element, by, ElementArrayFinder, ElementFinder} from 'protractor';
 
-export class EssentialsAngularAppPage {
+export class TalksAppPage {
   navigateTo() {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+  getTitleInput() {
+    return element(by.css('input[formcontrolname=title]'));
+  }
+
+  getTalks() {
+    return element.all(by.css('talk-cmp'));
+  }
+
+  getTalkText(index: number) {
+    return this.getTalks().get(index).geText();
   }
 }

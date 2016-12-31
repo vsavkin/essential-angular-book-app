@@ -11,6 +11,6 @@ export class AppCmp {
   constructor(public app: App) {}
 
   handleFiltersChange(filters: Filters): void {
-    this.app.filters = filters;
+    this.app.model.filters = filters;
   }
 }

@@ -14,4 +14,5 @@ export interface Filters {
 
 export interface Model {
   talks: Talk[];
+  filters: Filters;
 }
