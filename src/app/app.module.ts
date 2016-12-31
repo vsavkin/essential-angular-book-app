@@ -11,6 +11,7 @@ import { WatchButtonCmp } from './watch-button/watch-button.component';
 import { RateButtonCmp } from './rate-button/rate-button.component';
 import { FormatRatingPipe } from './format-rating.pipe';
 import {App} from "./app";
+import {createFiltersObject} from "./create_filters_object";
 import { FiltersCmp } from './filters/filters.component';
 
 @NgModule({
@@ -29,7 +30,10 @@ import { FiltersCmp } from './filters/filters.component';
     HttpModule,
     MaterialModule.forRoot()
   ],
-  providers: [App],
+  providers: [
+    App,
+    {provide: 'createFiltersObject', useValue: createFiltersObject}
+  ],
   bootstrap: [AppCmp]
 })
 export class AppModule { }

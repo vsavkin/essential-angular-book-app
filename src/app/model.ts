@@ -8,6 +8,8 @@ export interface Talk {
 
 export interface Filters {
   speaker: string;
+  title: string;
+  minRating: number;
 }
 
 export interface Model {

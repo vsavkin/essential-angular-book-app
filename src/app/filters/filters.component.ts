@@ -1,5 +1,6 @@
-import {Component, EventEmitter, Output} from "@angular/core";
+import {Component, EventEmitter, Output, Inject} from "@angular/core";
 import {FormGroup, FormControl} from "@angular/forms";
+import {Filters} from "../model";
 
 @Component({
   selector: 'filters-cmp',
@@ -10,12 +11,14 @@ export class FiltersCmp {
   @Output() change = new EventEmitter();
 
   filters = new FormGroup({
-    speaker: new FormControl()
+    speaker: new FormControl(),
+    title: new FormControl(),
+    highRating: new FormControl(false),
   });
 
-  constructor() {
+  constructor(@Inject('createFiltersObject') createFilters: Function) {
     this.filters.valueChanges.subscribe((value) => {
-      this.change.next(value);
+      this.change.next(createFilters(value));
     });
   }
 }

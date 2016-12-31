@@ -1,3 +1,14 @@
-<md-input-container [formGroup]="filters">
-  <input md-input formControlName="speaker" placeholder="Speaker">
-</md-input-container>
+<div [formGroup]="filters">
+  <md-input-container>
+    <input md-input formControlName="title" placeholder="Title">
+  </md-input-container>
+
+  <md-input-container>
+    <input md-input formControlName="speaker" placeholder="Speaker">
+  </md-input-container>
+
+  <md-checkbox formControlName="highRating">
+    High Rating
+  </md-checkbox>
+</div>
+

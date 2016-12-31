@@ -1,7 +1,7 @@
 import {Talk, Model, Filters} from "./model";
 
 export class App {
-  filters: Filters = {speaker: null};
+  filters: Filters = {speaker: null, title: null, minRating: 0};
   rawModel: Model = {
     talks: [
       {
@@ -36,13 +36,13 @@ export class App {
   };
 
   get model(): Model {
-    if (this.filters.speaker) {
-      return {
-        talks: this.rawModel.talks.filter(t => t.speaker.indexOf(this.filters.speaker) > -1)
-      };
-    } else {
-      return this.rawModel;
-    }
+    const talks = this.rawModel.talks.filter(t => {
+      const titlePass = this.filters.title ? t.title.indexOf(this.filters.title) > -1 : true;
+      const speakerPass = this.filters.speaker ? t.speaker.indexOf(this.filters.speaker) > -1 : true;
+      const ratingPass = t.rating >= this.filters.minRating;
+      return titlePass && speakerPass && ratingPass;
+    });
+    return {talks};
   }
 
   rateTalk(talk: Talk, rating: number): void {
